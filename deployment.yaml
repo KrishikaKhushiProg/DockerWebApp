@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: amansood/kube-webapp:v1
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        envFrom:
+        - configMapRef:
+            name: webapp-config
+        env:
+        - name: DB_CONNECTION
+          valueFrom:
+            secretKeyRef:
+              name: webapp-secret
+              key: DB_CONNECTION_STRING

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kubernetes Demo App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 10px 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #info-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    #stress-button {
+      background-color: #f44336;
+      color: white;
+    }
+    #info-display {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kubernetes Demo Web App</h1>
+  <div>
+    <button id="info-button">Get App Info</button>
+    <button id="stress-button">Stress CPU</button>
+  </div>
+  <div id="info-display"></div>
+
+  <script>
+    document.getElementById('info-button').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/api/info');
+        const data = await response.json();
+        
+        // This is the corrected line - creating the HTML string correctly
+        document.getElementById('info-display').innerHTML = 
+          '<strong>Version:</strong> ' + data.version + '<br>' +
+          '<strong>Environment:</strong> ' + data.env;
+      } catch (error) {
+        document.getElementById('info-display').textContent = 'Error fetching app info: ' + error.message;
+      }
+    });
+
+    document.getElementById('stress-button').addEventListener('click', () => {
+      document.getElementById('info-display').textContent = 'Stressing CPU...';
+      const startTime = Date.now();
+      // Simple CPU-intensive operation
+      while (Date.now() - startTime < 5000) {
+        for (let i = 0; i < 1000000; i++) {
+          Math.sqrt(i);
+        }
+      }
+      document.getElementById('info-display').textContent = 'CPU stress completed!';
+    });
+  </script>
+</body>
+</html>
