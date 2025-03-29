@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: amansood/kube-webapp:v1
+        image: amanwwsood/kube-webapp:v1
         ports:
         - containerPort: 3000
         resources:
